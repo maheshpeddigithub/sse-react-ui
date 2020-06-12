@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-ui
+spec:
+  selector:
+    matchLabels:
+      app: react-ui
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: react-ui
+        env: development
+    spec:
+      containers:
+        - name: react-ui
+          image: eu.gcr.io/ssil1-258911/react-ui:v1
+          ports:
+            - containerPort: 80
+          env:
+            - name: PORT
+              value: "80"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: react-ui
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+  selector:
+    app: react-ui
